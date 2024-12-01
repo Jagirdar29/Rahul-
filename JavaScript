@@ -1,0 +1,40 @@
+let cart = [];
+
+function addToCart(button) {
+  const product = button.parentElement;
+  const id = product.getAttribute("data-id");
+  const name = product.getAttribute("data-name");
+  const price = parseFloat(product.getAttribute("data-price"));
+
+  const existingProduct = cart.find(item => item.id === id);
+
+  if (existingProduct) {
+    existingProduct.quantity += 1;
+  } else {
+    cart.push({ id, name, price, quantity: 1 });
+  }
+
+  updateCart();
+}
+
+function updateCart() {
+  const cartItems = document.getElementById("cart-items");
+  cartItems.innerHTML = "";
+
+  let total = 0;
+  cart.forEach(item => {
+    total += item.price * item.quantity;
+
+    const li = document.createElement("li");
+    li.textContent = `${item.name} x ${item.quantity} - $${item.price * item.quantity}`;
+    cartItems.appendChild(li);
+  });
+
+  document.getElementById("total").textContent = `Total: $${total}`;
+}
+
+function checkout() {
+  alert("Thank you for your purchase!");
+  cart = [];
+  updateCart();
+}
